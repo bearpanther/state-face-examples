@@ -1,0 +1,67 @@
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: sans-serif;
+  height: 100%;
+}
+textarea, input { 
+  outline: none; 
+} /* http://stackoverflow.com/a/935572/1934 */
+h1 {
+  margin: 10px 0 0 0;
+}
+h5 {
+  margin: 0 0 10px 0;
+}
+
+.main {
+  background: #fff;
+  height: 100%;
+  margin: 0 auto;
+  width: 820px;
+}
+.current, {
+  background: #444;
+  float: left;
+  height: 180px;
+  margin: 10px 5px 10px 5px;
+  padding: 10px 0 0 0;
+  text-align: center;
+  width: 100%;
+}
+
+.box-key, .output {
+  background: #444;
+  border: none;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+}
+.box-key {
+  font-size: 5.5em;
+  padding: 10px;
+}
+.output {
+  font-size: 8em;
+  height: 124px;
+  margin: 20px 0 0 0;
+  padding: 4px 0 0 0;
+  width: 100%;
+}
+@font-face {
+  font-family: "StateFaceRegular";
+  src: url("font/webfont/stateface-regular-webfont.eot");
+  src: url("font/webfont/stateface-regular-webfont.eot?#iefix") format("embedded-opentype"),
+       url("font/webfont/stateface-regular-webfont.woff") format("woff"),
+       url("font/webfont/stateface-regular-webfont.ttf") format("truetype"),
+       url("font/webfont/stateface-regular-webfont.svg#StateFaceRegular") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+.state-icon {
+  font-family: "StateFaceRegular"
+}

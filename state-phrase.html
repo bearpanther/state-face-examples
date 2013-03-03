@@ -1,0 +1,62 @@
+<html>
+<head>
+  <link rel="stylesheet" href="css/state-phrase.css">
+  <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.0/dojo/dojo.js"></script>
+  <script>
+    require([
+      "dojo/keys", 
+      "dojo/dom", 
+      "dojo/query", 
+      "dojo/on", 
+      "dojo/domReady!"
+    ], function(
+      keys, dom, query, on
+    ) {
+        var boxKey = query(".box-key")[0];
+        var output = query(".output")[0];
+        if ( !boxKey || !output ) {
+          console.log("couldn't find the DOM nodes required...check the markup.");
+          return;
+        }
+        boxKey.focus();
+        // console.log("input: ", boxKey);
+        on(boxKey, "keypress", function(e) {
+          console.log("setting box code to: ", boxKey.value, e);
+          var typed = String.fromCharCode(e.charCode);
+          // boxCode.innerHTML = "<span class=\"state-icon\">" + typed + "</span>";
+          // this.value = "";
+          // console.log("keypress: ", e, e.keyCode);
+          // console.log("new: ", output);
+          output.innerHTML += typed;
+          if ( (e.keyCode || e.charCode) === 13 ) {
+            this.value = "";
+            output.innerHTML = "";
+          }
+        });
+      }
+    );
+  </script>
+</head>
+
+<body>
+
+  <div class="main">
+
+    <h1>
+      State Phrase
+    </h1>
+    <h5>
+      Type to see the corresponding phrase as states. 
+      Made possible by the awesome <a href="http://propublica.github.com/stateface/">Stateface</a>.
+      Press enter to start over.
+    </h5>
+
+    <div class="current">
+      <input class="box-key" type="text">
+    </div>
+
+    <div class="state-icon output"></div>
+
+  </div>
+</body>
+</html>

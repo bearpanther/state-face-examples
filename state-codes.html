@@ -1,0 +1,66 @@
+<html>
+<head>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.0/dojo/dojo.js"></script>
+  <script>
+    require([
+      "dojo/keys", 
+      "dojo/dom", 
+      "dojo/query", 
+      "dojo/on", 
+      "dojo/domReady!"
+    ], function(
+      keys, dom, query, on
+    ) {
+        var boxKey = query(".box-key")[0];
+        var boxCode = query(".box-code")[0];
+        var history = query(".history-list")[0];
+        if ( !boxKey || !boxCode || ! history ) {
+          console.log("couldn't find the DOM nodes required...check the markup.");
+          return;
+        }
+        boxKey.focus();
+        // console.log("input: ", boxKey);
+        on(boxKey, "keypress", function(e) {
+          console.log("setting box code to: ", boxKey.value, e);
+          var typed = String.fromCharCode(e.charCode);
+          boxCode.innerHTML = "<span class=\"state-icon\">" + typed + "</span>";
+          this.value = "";
+          // console.log("keypress: ", e, e.keyCode);
+          // boxCode.innerHTML = e.keyCode;
+          var historyEntry = "<span class=\"output\">" + typed + "</span> " + 
+            "<span class=\"output state-icon\">" + typed + "</span> " + 
+            "<span class=\"output\">" + e.charCode + "</span><br>";
+          // console.log("new history: ", historyEntry);
+          history.innerHTML = historyEntry + history.innerHTML;
+        });
+      }
+    );
+  </script>
+</head>
+
+<body>
+
+  <div class="main">
+
+    <div class="current-key">
+      <input class="box-key" type="text">
+    </div>
+
+    <div class="current-code">
+      <span class="box-code">...</span>
+    </div>
+
+    <div class="history history-header">
+      <span class="output">Typed</span>
+      <span class="output">State</span>
+      <span class="output">Code</span>
+    </div>
+
+    <div class="history history-wrapper">
+      <p class="history-list"></p>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<html>
+<head>
+  <link rel="stylesheet" href="css/font/stateface.css">
+  <link rel="stylesheet" href="css/state-list.css">
+  <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.0/dojo/dojo.js"></script>
+  <script>
+    require([
+      "dojo/_base/array", 
+      "dojo/dom", 
+      "dojo/dom-style", 
+      "dojo/query", 
+      "dojo/string", 
+      "dojo/request/script",
+      "dojo/domReady!"
+    ], function(
+      array, dom, domStyle, query, string, script 
+    ) {
+        // get state names and abbreviations from ArcGIS Server
+        // example url:
+        // http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3/query?where=1=1&outFields=STATE_NAME,STATE_ABBR&returnGeometry=false&f=json&callback=callback
+        var statesUrl = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3/query";
+        script.get(statesUrl, {
+          query: {
+            f: "json",
+            outFields: "STATE_ABBR, STATE_NAME",
+            returnGeometry: false,
+            where: "1=1"
+          },
+          jsonp: "callback"
+        }).then(showStateList, errorHandler);
+
+        function showStateList(data) {
+          // console.log("wow...worked: ", data);
+          data.features.sort(alphabetizeStates);
+          var inliners = array.map(data.features, createStateSpan);
+          // console.log("mapped stuff: ", markup);
+          var spans = inliners.join(" ");
+          var blockers = array.map(data.features, createStateDiv);
+          var divs = blockers.join(" ");
+          var parent = query(".state-list")[0];
+          domStyle.set(parent, "textAlign", "left");
+          parent.innerHTML = "Inline with spans:<br><br>" + spans + "<br><hr><br>" + 
+            "Divs, inline-block and centered text:<br><br>" + divs;
+        }
+
+        function createStateSpan(state) {
+          var stateTemplate = "<span class=\"stateface stateface-${abbr}\">${name}&nbsp;</span>";
+          var attrs = { 
+            abbr: state.attributes.STATE_ABBR.toLowerCase(), 
+            name: state.attributes.STATE_NAME 
+          };
+          var span = string.substitute(stateTemplate, attrs);
+          return  span;
+        }
+
+        function createStateDiv(state) {
+          var stateTemplate = "<div class=\"stateface stateface-${abbr} blocker\">${name}&nbsp;</div>";
+          var attrs = { 
+            abbr: state.attributes.STATE_ABBR.toLowerCase(), 
+            name: state.attributes.STATE_NAME 
+          };
+          var div = string.substitute(stateTemplate, attrs);
+          return  div;
+        }
+
+        function alphabetizeStates(a, b) {
+          if ( a.attributes.STATE_NAME < b.attributes.STATE_NAME ) {
+            return -1;
+          }
+          if ( a.attributes.STATE_NAME > b.attributes.STATE_NAME ) {
+            return 1;
+          }
+          return 0;
+        }
+
+        function errorHandler(error) {
+          console.log("bonk: ", error);
+        }
+      }
+    );
+  </script>
+</head>
+
+<body>
+
+  <div class="main">
+
+    <h1>
+      State List
+    </h1>
+    <h5>
+      Using <a href="http://propublica.github.com/stateface/">Stateface</a> 
+      to show state shapes next to each state name.
+    </h5>
+
+    <div class="state-list">
+      Getting state info
+      <br><br>
+      <img src="img/gear.gif">
+    </div>
+
+  </div>
+</body>
+</html>
